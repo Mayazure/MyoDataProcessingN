@@ -44,7 +44,7 @@ public class NDataExtractor {
 		for(int i=0;i<=NConfig.totalExp;i++){
 			
 			String[] path = {
-					dataInfo.getDataDirPath()+String.valueOf(i)+".csv",
+					dataInfo.getDataDirPath()+"n_"+String.valueOf(i)+".csv",
 					dataInfo.getDataDirPath()+String.valueOf(i)+".txt"
 					};
 			
