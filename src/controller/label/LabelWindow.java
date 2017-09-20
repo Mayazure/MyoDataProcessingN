@@ -11,6 +11,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
+import javax.swing.text.BadLocationException;
 
 import ntime.NTimeParser;
 
@@ -61,16 +62,16 @@ public class LabelWindow extends JFrame implements NSecondInputCallback{
 		toolPanel.setLayout(toolPanelLayout);
 		mainPanel.add(toolPanel);
 		
-		year = new NNumInput("Year");
-		month = new NNumInput("Month");
-		day = new NNumInput("Day");
-		hour = new NNumInput("Hour");
+		year = new NNumInput("Year","2019");
+		month = new NNumInput("Month","09");
+		day = new NNumInput("Day","20");
+		hour = new NNumInput("Hour","23");
 		toolPanel.add(year);
 		toolPanel.add(month);
 		toolPanel.add(day);
 		toolPanel.add(hour);
 		
-		secondInput = new NSecondInput(this);
+		secondInput = new NSecondInput("39344756",this);
 		toolPanel.add(secondInput);
 		
 		console = new JTextArea();
@@ -115,6 +116,22 @@ public class LabelWindow extends JFrame implements NSecondInputCallback{
 //		console.append("Minute: " + info.getMinute());
 //		console.append("Second: " + info.getSecond());
 //		console.append("Millisecond" + info.getMillisecond());
+	}
+	
+	@Override
+	public void secondInputCancelLast() {
+		int lines = console.getLineCount();
+		int linestart = 0;
+		try {
+			linestart = console.getLineStartOffset(lines-2);
+		} catch (BadLocationException e) {
+			e.printStackTrace();
+		}
+		int len = console.getText().length();
+//		console.setCaretPosition(position);
+//		console.append("# ");
+		console.insert("# ", linestart);
+		console.setCaretPosition(console.getText().length());
 	}
 	
 	private void updateConsole(String data){

@@ -24,13 +24,16 @@ public class NNumInput extends JPanel{
 	private Document document;
 
 	public NNumInput(){
-		this("");
+		this("","0");
 	}
 	
-	public NNumInput(String titleString){
+	public NNumInput(String titString){
+		this(titString,"0");
+	}
+	
+	public NNumInput(String titleString, String num){
 		super();
 
-		
 		input = new JTextField();
 		increase = new JButton("+");
 		decrease = new JButton("-");
@@ -38,9 +41,12 @@ public class NNumInput extends JPanel{
 		BoxLayout mainLayout = new BoxLayout(this, BoxLayout.Y_AXIS);
 		this.setLayout(mainLayout);
 
+		Box titleBox = Box.createHorizontalBox();
 		title = new JLabel(titleString);
-		this.add(title);		
+		titleBox.add(title);
+		this.add(titleBox);		
 		
+		input.setText(num);
 		input.setMaximumSize(new Dimension(80, 25));
 //		input.setMinimumSize(new Dimension(80, 25));
 		document = input.getDocument();
