@@ -1,0 +1,138 @@
+package controller.label;
+
+import java.awt.Dimension;
+
+import javax.swing.Box;
+import javax.swing.BoxLayout;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JTextArea;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
+
+import ntime.NTimeParser;
+
+
+public class LabelWindow extends JFrame implements NSecondInputCallback{	
+	
+	private JPanel toolPanel;	
+	private JTextArea console;
+	private JLabel countLabel;
+	
+	private NNumInput year;
+	private NNumInput month;
+	private NNumInput day;
+	private NNumInput hour;
+	private NSecondInput secondInput;
+	
+	private NTimeParser timeParser;
+	private int count = 0;
+	
+	public LabelWindow(){
+		super();
+		try {
+			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+		} catch (ClassNotFoundException e1) {
+			e1.printStackTrace();
+		} catch (InstantiationException e1) {
+			e1.printStackTrace();
+		} catch (IllegalAccessException e1) {
+			e1.printStackTrace();
+		} catch (UnsupportedLookAndFeelException e1) {
+			e1.printStackTrace();
+		}
+
+		//		ImageIcon imageIcon = new ImageIcon(getClass().getResource("/image/icon.png"));  
+		//		this.setIconImage(imageIcon.getImage()); 
+		this.setTitle("Label Tool");
+		this.setSize(500,800);
+		
+		timeParser = new NTimeParser();
+		
+		JPanel mainPanel = new JPanel();
+		BoxLayout mainPanelLayout = new BoxLayout(mainPanel, BoxLayout.Y_AXIS);
+		mainPanel.setLayout(mainPanelLayout);
+		this.setContentPane(mainPanel);
+	
+		toolPanel = new JPanel();
+		BoxLayout toolPanelLayout = new BoxLayout(toolPanel, BoxLayout.X_AXIS);
+		toolPanel.setLayout(toolPanelLayout);
+		mainPanel.add(toolPanel);
+		
+		year = new NNumInput("Year");
+		month = new NNumInput("Month");
+		day = new NNumInput("Day");
+		hour = new NNumInput("Hour");
+		toolPanel.add(year);
+		toolPanel.add(month);
+		toolPanel.add(day);
+		toolPanel.add(hour);
+		
+		secondInput = new NSecondInput(this);
+		toolPanel.add(secondInput);
+		
+		console = new JTextArea();
+		mainPanel.add(console);
+		
+		Box stateBar = Box.createHorizontalBox();
+		stateBar.add(new JLabel("Total: "));
+		countLabel = new JLabel(count+"");
+		stateBar.add(countLabel);
+		this.add(stateBar);		
+		
+		this.setMinimumSize(new Dimension(400,300));
+		this.setVisible(true);
+		this.setLocationRelativeTo(null);
+		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
+	}
+	
+	public static void main(String[] args) {
+		LabelWindow lw = new LabelWindow();
+	}
+
+	@Override
+	public void secondInputCallback(NSecondInfo info) {
+		StringBuilder builder = new StringBuilder();
+		builder.append(year.getText()).append("-");
+		builder.append(month.getText()).append("-");
+		builder.append(day.getText()).append(" ");
+		builder.append(hour.getText()).append(":");
+		builder.append(info.getMinute()).append(":");
+		builder.append(info.getSecond()).append(":");
+		builder.append(info.getMillisecond());
+		
+		String datetime = builder.toString();
+		long timestamp = timeParser.getTimestamp(datetime);
+		String output = datetime + "," + timestamp + "," + info.getAction();
+		
+		updateConsole(output);
+		updateCount(1);
+		
+		secondInput.selectAll();
+//		console.append("Action: " + info.getAction());
+//		console.append("Minute: " + info.getMinute());
+//		console.append("Second: " + info.getSecond());
+//		console.append("Millisecond" + info.getMillisecond());
+	}
+	
+	private void updateConsole(String data){
+		console.append(data);
+		console.append("\r\n");
+	}
+	
+	private void updateCount(int flag){
+		switch (flag) {
+		case 0:
+			count--;
+			break;
+		case 1:
+			count++;
+			break;
+		default:
+			break;
+		}
+		countLabel.setText(count+"");
+	}
+}
