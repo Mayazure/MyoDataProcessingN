@@ -26,14 +26,22 @@ public class NDataInfo {
 	//The directory where all parsed emg.csv files stored
 	private String parsedDirPath;
 
+	//The directory where all other data files stored
+	private String infoDirPath;
+	
 	//The path of the file that is being processed
 	private String[] workingFilePath;
 	
 	public void setDirPath(String dataFilePath) {
 		this.dataDirPath = dataFilePath;
-		this.parsedDirPath = dataFilePath+"\\ParsedData_"+NConfig.distribution+"\\";
+		this.parsedDirPath = dataFilePath+"ParsedData_"+NConfig.distribution+"\\";
+		this.infoDirPath = dataFilePath+"InfoData\\";
 	}
-	
+
+	public String getInfoDirPath() {
+		return infoDirPath;
+	}
+
 	public String getDataDirPath() {
 		return dataDirPath;
 	}

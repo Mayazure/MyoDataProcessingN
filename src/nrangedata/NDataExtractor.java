@@ -36,6 +36,42 @@ public class NDataExtractor {
 		}
 	}
 	
+	public void getLinesList(){
+		String path0 = dataInfo.getInfoDirPath();
+		File dir = new File(path0);
+		if(!dir.exists()||!dir.isDirectory()){
+			fileOperator.createFileDir(path0);
+		}
+		
+		for(int i=0;i<=NConfig.totalExp;i++){
+			String[] path = {
+					dataInfo.getDataDirPath()+String.valueOf(i)+".csv",
+					dataInfo.getDataDirPath()+String.valueOf(i)+".txt"
+					};
+			
+			File workingFile = new File(path[0]);
+			if(!workingFile.exists()){
+				mainWindow.updateSimpleConsole("Skipped."+path[0]);
+				continue;
+			}
+			dataInfo.setWorkingFilePath(path);
+			
+			fileOperator.loadWriteFile(path0+String.valueOf(i)+".csv");
+			
+			NRangeList rangeList = new NRangeList(dataInfo.getWorkingFilePath(NDataInfo.RANGEFILE));
+			ArrayList<NRangeInfo> rangeInfos = rangeList.getRangeList();
+			Iterator<NRangeInfo> iterator = rangeInfos.iterator();
+			
+			while(iterator.hasNext()){
+				NRangeInfo rangeInfo = iterator.next();
+				String output = lineSeeker.seekLine(rangeInfo.getTimestamp()) + "," + rangeInfo.getTimestamp();
+				fileOperator.writeToFile(output);
+			}
+			
+			mainWindow.updateSimpleConsole("Line finished."+path0+String.valueOf(i)+".csv");
+		}
+	}
+	
 	public void extractData(){
 		for(int i=0;i<distribution;i++){
 			fileOperator.createFileDir(dataInfo.getParsedDirPath()+i);
@@ -62,7 +98,7 @@ public class NDataExtractor {
 			
 			while(iterator.hasNext()){
 				NRangeInfo rangeInfo = iterator.next();
-				Line tempLine = new Line(lineSeeker.seekLine(rangeInfo.getTimestamp()),rangeInfo.getRange1(),rangeInfo.getRange2());
+				Line tempLine = new Line(lineSeeker.seekLine(rangeInfo.getTimestamp()),rangeInfo.getRange1(),rangeInfo.getRange2(),rangeInfo.getTimestamp());
 				lines.add(tempLine);
 			}
 			
@@ -106,13 +142,15 @@ public class NDataExtractor {
 	
 	private class Line{
 		private int line;
+		private String timestamp;
 		private String range1;
 		private String range2;
-		public Line(int line, String range1, String range2) {
+		public Line(int line, String range1, String range2, String timestamp) {
 			super();
 			this.line = line;
 			this.range1 = range1;
 			this.range2 = range2;
+			this.timestamp = timestamp;
 		}
 		public int getLine() {
 			return line;
@@ -131,6 +169,12 @@ public class NDataExtractor {
 		}
 		public void setRange2(String range2) {
 			this.range2 = range2;
+		}
+		public String getTimestamp() {
+			return timestamp;
+		}
+		public void setTimestamp(String timestamp) {
+			this.timestamp = timestamp;
 		}
 		
 	}

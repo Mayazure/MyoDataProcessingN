@@ -28,6 +28,7 @@ public class MainWindow extends JFrame{
 	private JTextArea console;
 	private JButton selectButton;
 	private JButton extractButton;
+	private JButton getlineButton;
 	
 	private NDataInfo dataInfo = NDataInfo.getDataInfoInstance();
 //	private FileParser fileParser;
@@ -51,6 +52,8 @@ public class MainWindow extends JFrame{
 			e1.printStackTrace();
 		}
 
+		dataExtractor = new NDataExtractor(MainWindow.this);
+		
 		//		ImageIcon imageIcon = new ImageIcon(getClass().getResource("/image/icon.png"));  
 		//		this.setIconImage(imageIcon.getImage()); 
 		this.setTitle("MyoDriving Data Processing");
@@ -76,6 +79,8 @@ public class MainWindow extends JFrame{
 		
 		selectButton = new JButton("select");
 		extractButton = new JButton("extract");
+		getlineButton = new JButton("lines");
+		
 		selectButton.addActionListener(new ActionListener() {
 			
 			@Override
@@ -105,14 +110,23 @@ public class MainWindow extends JFrame{
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				dataExtractor = new NDataExtractor(MainWindow.this);
 				dataExtractor.extractData();
 				updateSimpleConsole("Data extraction done.");
 			}
 		});
 		
+		getlineButton.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				dataExtractor.getLinesList();
+				updateSimpleConsole("Get line done.");
+			}
+		});
+		
 		toolPanel.add(selectButton);
 		toolPanel.add(extractButton);
+		toolPanel.add(getlineButton);
 		toolPanel.add(Box.createHorizontalGlue());
 
 		this.setMinimumSize(new Dimension(800,640));
