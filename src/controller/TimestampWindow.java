@@ -16,6 +16,7 @@ import javax.swing.UnsupportedLookAndFeelException;
 
 import ntime.NTimeParser;
 
+@SuppressWarnings("serial")
 public class TimestampWindow extends JFrame{
 
 	private JTextArea console;
@@ -120,6 +121,7 @@ public class TimestampWindow extends JFrame{
 	}
 	
 	public static void main(String[] args) {
+		@SuppressWarnings("unused")
 		TimestampWindow timestampWindow = new TimestampWindow();
 	}
 }

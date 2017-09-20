@@ -7,7 +7,7 @@ import java.io.File;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
-import javax.swing.ImageIcon;
+//import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
@@ -20,6 +20,7 @@ import javax.swing.UnsupportedLookAndFeelException;
 import nconfig.NDataInfo;
 import nrangedata.NDataExtractor;
 
+@SuppressWarnings("serial")
 public class MainWindow extends JFrame{
 
 	private JPanel mainPanel;
