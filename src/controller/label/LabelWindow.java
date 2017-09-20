@@ -30,6 +30,7 @@ public class LabelWindow extends JFrame implements NSecondInputCallback{
 	
 	private NTimeParser timeParser;
 	private int count = 0;
+	private boolean canceled = false;
 	
 	public LabelWindow(){
 		super();
@@ -110,6 +111,7 @@ public class LabelWindow extends JFrame implements NSecondInputCallback{
 		
 		updateConsole(output);
 		updateCount(1);
+		canceled = false;
 		
 		secondInput.selectAll();
 //		console.append("Action: " + info.getAction());
@@ -120,6 +122,9 @@ public class LabelWindow extends JFrame implements NSecondInputCallback{
 	
 	@Override
 	public void secondInputCancelLast() {
+		if(canceled){
+			return;
+		}
 		int lines = console.getLineCount();
 		int linestart = 0;
 		try {
@@ -128,10 +133,10 @@ public class LabelWindow extends JFrame implements NSecondInputCallback{
 			e.printStackTrace();
 		}
 		int len = console.getText().length();
-//		console.setCaretPosition(position);
-//		console.append("# ");
 		console.insert("# ", linestart);
 		console.setCaretPosition(console.getText().length());
+		updateCount(0);
+		canceled = true;
 	}
 	
 	private void updateConsole(String data){
