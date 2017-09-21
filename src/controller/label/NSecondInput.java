@@ -36,9 +36,9 @@ public class NSecondInput extends JPanel{
 		this.add(titleBox);
 
 		input = new JTextField();
-		input.setPreferredSize(new Dimension(100, 25));
-		input.setMaximumSize(new Dimension(100, 25));
-		input.setMinimumSize(new Dimension(100, 25));
+		input.setPreferredSize(new Dimension(80, 25));
+		input.setMaximumSize(new Dimension(80, 25));
+		input.setMinimumSize(new Dimension(80, 25));
 		input.setText(num);
 		this.add(input);
 

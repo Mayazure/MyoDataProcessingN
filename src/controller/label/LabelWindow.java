@@ -13,24 +13,32 @@ import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.text.BadLocationException;
 
+import nconfig.NLabelInfo;
+import nfileoperator.NFileOperator;
 import ntime.NTimeParser;
 
 
-public class LabelWindow extends JFrame implements NSecondInputCallback{	
+public class LabelWindow extends JFrame implements NSecondInputCallback, NNumInputCallback{	
 	
-	private JPanel toolPanel;	
+	private Box toolPanel;	
 	private JTextArea console;
 	private JLabel countLabel;
 	
+	private NNumInput exp;
 	private NNumInput year;
 	private NNumInput month;
 	private NNumInput day;
 	private NNumInput hour;
 	private NSecondInput secondInput;
 	
+	private JButton start;
+	private JButton stop;
+	
 	private NTimeParser timeParser;
+	private NLabelInfo labelInfo = NLabelInfo.getNLabelInfoInstance();
+	private NFileOperator fileOperator;
 	private int count = 0;
-	private boolean canceled = false;
+	private boolean canceled = true;
 	
 	public LabelWindow(){
 		super();
@@ -49,24 +57,26 @@ public class LabelWindow extends JFrame implements NSecondInputCallback{
 		//		ImageIcon imageIcon = new ImageIcon(getClass().getResource("/image/icon.png"));  
 		//		this.setIconImage(imageIcon.getImage()); 
 		this.setTitle("Label Tool");
-		this.setSize(500,800);
+		this.setSize(486,800);
 		
 		timeParser = new NTimeParser();
+		fileOperator = new NFileOperator();
 		
 		JPanel mainPanel = new JPanel();
 		BoxLayout mainPanelLayout = new BoxLayout(mainPanel, BoxLayout.Y_AXIS);
 		mainPanel.setLayout(mainPanelLayout);
 		this.setContentPane(mainPanel);
 	
-		toolPanel = new JPanel();
-		BoxLayout toolPanelLayout = new BoxLayout(toolPanel, BoxLayout.X_AXIS);
-		toolPanel.setLayout(toolPanelLayout);
+		toolPanel = Box.createHorizontalBox();
 		mainPanel.add(toolPanel);
 		
+		exp = new NNumInput("Exp","2");
+		exp.setListener(this);
 		year = new NNumInput("Year","2019");
 		month = new NNumInput("Month","09");
 		day = new NNumInput("Day","20");
 		hour = new NNumInput("Hour","23");
+		toolPanel.add(exp);
 		toolPanel.add(year);
 		toolPanel.add(month);
 		toolPanel.add(day);
@@ -74,6 +84,15 @@ public class LabelWindow extends JFrame implements NSecondInputCallback{
 		
 		secondInput = new NSecondInput("39344756",this);
 		toolPanel.add(secondInput);
+		toolPanel.add(Box.createHorizontalGlue());
+		
+		start = new JButton("Start");
+		stop = new JButton("Stop");
+		Box controlBar = Box.createHorizontalBox();
+		controlBar.add(start);
+		controlBar.add(stop);
+		controlBar.add(Box.createHorizontalGlue());
+		mainPanel.add(controlBar);
 		
 		console = new JTextArea();
 		mainPanel.add(console);
@@ -84,7 +103,7 @@ public class LabelWindow extends JFrame implements NSecondInputCallback{
 		stateBar.add(countLabel);
 		this.add(stateBar);		
 		
-		this.setMinimumSize(new Dimension(400,300));
+		this.setMinimumSize(new Dimension(486,300));
 		this.setVisible(true);
 		this.setLocationRelativeTo(null);
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -137,6 +156,13 @@ public class LabelWindow extends JFrame implements NSecondInputCallback{
 		console.setCaretPosition(console.getText().length());
 		updateCount(0);
 		canceled = true;
+	}
+	
+	@Override
+	public void nNumInputCallback(NNumInfo info) {
+		labelInfo.setWorkingFile(info.getData());
+		fileOperator.closeOut();
+		fileOperator.loadWriteFile(labelInfo.getWorkingDir()+labelInfo.getWorkingFile());
 	}
 	
 	private void updateConsole(String data){

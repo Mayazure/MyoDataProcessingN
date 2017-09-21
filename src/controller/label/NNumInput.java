@@ -22,6 +22,7 @@ public class NNumInput extends JPanel{
 	private JButton increase;
 	private JButton decrease;
 	private Document document;
+	private NNumInputCallback callback = null;
 
 	public NNumInput(){
 		this("","0");
@@ -67,6 +68,8 @@ public class NNumInput extends JPanel{
 					int num = Integer.parseInt(text);
 					input.setText(String.valueOf(num-1));
 				}
+				NNumInfo info = new NNumInfo(input.getText());
+				makeCallBcak(info);
 			}
 		});
 
@@ -79,7 +82,10 @@ public class NNumInput extends JPanel{
 					int num = Integer.parseInt(text);
 					input.setText(String.valueOf(num+1));
 				}
+				NNumInfo info = new NNumInfo(input.getText());
+				makeCallBcak(info);
 			}
+			
 		});
 
 		document.addDocumentListener(new DocumentListener() {
@@ -111,5 +117,15 @@ public class NNumInput extends JPanel{
 	
 	public String getText(){
 		return input.getText();
+	}
+	
+	public void setListener(NNumInputCallback callback){
+		this.callback = callback;
+	}
+	
+	private void makeCallBcak(NNumInfo info){
+		if(callback!=null){
+			callback.nNumInputCallback(info);
+		}
 	}
 }
