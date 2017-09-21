@@ -17,5 +17,6 @@ public class NConfig {
 	
 	public static final int distribution = 3;
 	public static final int windowLength = 300;
-	public static final int totalExp = 5;
+	public static final int totalExp = 29;
+	public static final int startFrom = 7;
 }

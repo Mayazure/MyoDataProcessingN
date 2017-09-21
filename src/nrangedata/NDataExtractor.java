@@ -43,7 +43,7 @@ public class NDataExtractor {
 			fileOperator.createFileDir(path0);
 		}
 		
-		for(int i=0;i<=NConfig.totalExp;i++){
+		for(int i=NConfig.startFrom;i<=NConfig.totalExp;i++){
 			String[] path = {
 					dataInfo.getDataDirPath()+String.valueOf(i)+".csv",
 					dataInfo.getDataDirPath()+String.valueOf(i)+".txt"
@@ -56,18 +56,19 @@ public class NDataExtractor {
 			}
 			dataInfo.setWorkingFilePath(path);
 			
-			fileOperator.loadWriteFile(path0+String.valueOf(i)+".csv");
+			fileOperator.loadWriteFile(dataInfo.getInfoDirPath()+String.valueOf(i)+".csv");
 			
-			NRangeList rangeList = new NRangeList(dataInfo.getWorkingFilePath(NDataInfo.RANGEFILE));
-			ArrayList<NRangeInfo> rangeInfos = rangeList.getRangeList();
-			Iterator<NRangeInfo> iterator = rangeInfos.iterator();
+			NRangeList rangeList = new NRangeList(dataInfo.getWorkingFilePath(NDataInfo.RANGEFILE),NRangeList.RANGE_ORIGINAL);
+			ArrayList<NLineInfo> lineInfos = rangeList.getLineInfoList();
+			Iterator<NLineInfo> iterator = lineInfos.iterator();
 			
 			while(iterator.hasNext()){
-				NRangeInfo rangeInfo = iterator.next();
-				String output = lineSeeker.seekLine(rangeInfo.getTimestamp()) + "," + rangeInfo.getTimestamp();
+				NLineInfo lineInfo = iterator.next();
+				String output = lineSeeker.seekLine(lineInfo.getTimestamp2()) + "," + lineInfo.toText();
 				fileOperator.writeToFile(output);
 			}
 			
+			fileOperator.closeOut();
 			mainWindow.updateSimpleConsole("Line finished."+path0+String.valueOf(i)+".csv");
 		}
 	}
@@ -91,7 +92,7 @@ public class NDataExtractor {
 			}
 			dataInfo.setWorkingFilePath(path);
 			
-			NRangeList rangeList = new NRangeList(dataInfo.getWorkingFilePath(dataInfo.RANGEFILE));
+			NRangeList rangeList = new NRangeList(dataInfo.getWorkingFilePath(dataInfo.RANGEFILE),NRangeList.RANGE_MODIFIED);
 			ArrayList<NRangeInfo> rangeInfos = rangeList.getRangeList();
 			Iterator<NRangeInfo> iterator = rangeInfos.iterator();
 			ArrayList<Line> lines = new ArrayList<Line>();

@@ -7,7 +7,7 @@ public class NRangeParser {
 	private NTimeParser timeParser = new NTimeParser();
 	
 	//New Analysis Parse
-	public NRangeInfo NParseRange(String line){
+	public NRangeInfo parseRange(String line){
 		
 		line = line.trim();
 		
@@ -37,5 +37,18 @@ public class NRangeParser {
 		
 		NRangeInfo nRangeInfo = new NRangeInfo(timestamp, datas[1], datas[2], level);
 		return nRangeInfo;
+	}
+	
+	public NLineInfo parseOldRange(String line){
+				
+		int test = line.contains("TEST")?1:0;
+		
+		int start = line.indexOf(">");
+		String datetime = line.substring(0,start);
+		
+		line = line.substring(start+1).trim();
+		String[] data = line.split("\\$..=");
+		
+		return new NLineInfo(datetime, data[1],data[2],data[3],data[4],test);
 	}
 }
