@@ -29,6 +29,7 @@ public class MainWindow extends JFrame{
 	private JButton selectButton;
 	private JButton extractButton;
 	private JButton getlineButton;
+	private JButton extractButton2;
 	
 	private NDataInfo dataInfo = NDataInfo.getDataInfoInstance();
 //	private FileParser fileParser;
@@ -80,6 +81,7 @@ public class MainWindow extends JFrame{
 		selectButton = new JButton("select");
 		extractButton = new JButton("extract");
 		getlineButton = new JButton("lines");
+		extractButton2 = new JButton("extract new");
 		
 		selectButton.addActionListener(new ActionListener() {
 			
@@ -124,9 +126,15 @@ public class MainWindow extends JFrame{
 			}
 		});
 		
+		extractButton2.addActionListener(e -> {
+			dataExtractor.extractFromLines();
+			updateSimpleConsole("Done");
+		});
+		
 		toolPanel.add(selectButton);
 		toolPanel.add(extractButton);
 		toolPanel.add(getlineButton);
+		toolPanel.add(extractButton2);
 		toolPanel.add(Box.createHorizontalGlue());
 
 		this.setMinimumSize(new Dimension(800,640));

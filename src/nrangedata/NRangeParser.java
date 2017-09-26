@@ -1,5 +1,6 @@
 package nrangedata;
 
+import nconfig.NConfig;
 import ntime.NTimeParser;
 
 public class NRangeParser {
@@ -37,6 +38,15 @@ public class NRangeParser {
 		
 		NRangeInfo nRangeInfo = new NRangeInfo(timestamp, datas[1], datas[2], level);
 		return nRangeInfo;
+	}
+	
+	//Modified line parser
+	public NRangeInfoWithLine parseRangeWithLine(String line){
+		line = line.trim();
+		
+		String[] datas = line.split(",");
+		NRangeInfoWithLine rangeInfoWithLine = new NRangeInfoWithLine(Integer.valueOf(datas[0]), Integer.valueOf(datas[4]), Integer.valueOf(datas[5]));
+		return rangeInfoWithLine;
 	}
 	
 	public NLineInfo parseOldRange(String line){

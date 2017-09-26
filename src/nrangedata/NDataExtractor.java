@@ -74,7 +74,68 @@ public class NDataExtractor {
 	}
 	
 	public void extractFromLines(){
+		String path = dataInfo.getParsedDirPath();
+		File dir = new File(path);
+		if(!dir.exists()||!dir.isDirectory()){
+			fileOperator.createFileDir(path);
+		}
 		
+		for(int i=0;i<distribution;i++){
+			fileOperator.createFileDir(dataInfo.getParsedDirPath()+i);
+		}
+		
+		for (int i=NConfig.startFrom;i<=NConfig.totalExp;i++){
+			String[] path0 = {
+					dataInfo.getDataDirPath()+"n_"+String.valueOf(i)+".csv",
+					dataInfo.getDataDirPath()+ "modified\\" + String.valueOf(i)+".csv"
+					};
+			File workingFile = new File(path0[0]);
+			if(!workingFile.exists()){
+				mainWindow.updateSimpleConsole("Skipped."+path0[0]);
+				continue;
+			}
+			dataInfo.setWorkingFilePath(path0);
+			
+			NRangeList rangeList = new NRangeList(dataInfo.getWorkingFilePath(dataInfo.RANGEFILE),NRangeList.RANGE_MODIFIED_NEW);
+			ArrayList<NRangeInfoWithLine> ranges = rangeList.getRangeInfoWithLines();
+			Iterator<NRangeInfoWithLine> iterator = ranges.iterator();
+			
+			fileOperator.loadReadFile(dataInfo.getWorkingFilePath(NDataInfo.EMGFILE));
+			int currentLine = 0;
+			while(iterator.hasNext()){
+				NRangeInfoWithLine rangeInfoWithLine = iterator.next();
+				int anxiousLevel = NConfig.level[rangeInfoWithLine.getAnxiousLevel()];
+//				int angerLevel = NConfig.level[rangeInfoWithLine.getAngerLevel()];
+				fileOperator.loadWriteFile(dataInfo.getParsedDirPath()+anxiousLevel+"\\"+dataInfo.getClassCount(anxiousLevel)+".csv");
+				String line;
+				
+//				if(anxiousLevel==1&&dataInfo.getClassCount(anxiousLevel)==16){
+//					int a = 0;
+//					System.out.println(a);
+//				}
+				
+				while((line = fileOperator.nextLine())!=null){
+					currentLine++;
+					if(currentLine<rangeInfoWithLine.getLineStart()){
+						continue;
+					}
+					else if (currentLine<=rangeInfoWithLine.getLineEnd()) {
+						fileOperator.writeToFile(line);
+					}
+					else{
+						break;
+					}
+				}
+				
+				//debug
+//				System.out.println(anxiousLevel+", "+dataInfo.getClassCount(anxiousLevel)+": "+rangeInfoWithLine.getLineStart()+"-"+rangeInfoWithLine.getLineEnd());
+				
+				
+				dataInfo.addClassCount(anxiousLevel);
+				fileOperator.closeOut();
+			}
+			
+		}
 	}
 	
 	public void extractData(){
