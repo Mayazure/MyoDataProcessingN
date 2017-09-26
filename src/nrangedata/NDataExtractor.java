@@ -73,6 +73,10 @@ public class NDataExtractor {
 		}
 	}
 	
+	public void extractFromLines(){
+		
+	}
+	
 	public void extractData(){
 		for(int i=0;i<distribution;i++){
 			fileOperator.createFileDir(dataInfo.getParsedDirPath()+i);
