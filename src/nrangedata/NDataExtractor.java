@@ -109,7 +109,7 @@ public class NDataExtractor {
 				fileOperator.loadWriteFile(dataInfo.getParsedDirPath()+anxiousLevel+"\\"+dataInfo.getClassCount(anxiousLevel)+".csv");
 				String line;
 				
-//				if(anxiousLevel==1&&dataInfo.getClassCount(anxiousLevel)==16){
+//				if(anxiousLevel==2&&dataInfo.getClassCount(anxiousLevel)==10){
 //					int a = 0;
 //					System.out.println(a);
 //				}
