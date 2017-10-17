@@ -2,6 +2,7 @@ package nrangedata;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
 
 import controller.MainWindow;
@@ -85,6 +86,12 @@ public class NDataExtractor {
 		}
 		
 		for (int i=NConfig.startFrom;i<=NConfig.totalExp;i++){
+			
+			if(Arrays.binarySearch(NConfig.except, i)>0){
+				mainWindow.updateSimpleConsole("Expect: "+i);
+				continue;
+			}
+			
 			String[] path0 = {
 					dataInfo.getDataDirPath()+"n_"+String.valueOf(i)+".csv",
 					dataInfo.getDataDirPath()+ "modified\\" + String.valueOf(i)+".csv"
@@ -105,8 +112,9 @@ public class NDataExtractor {
 			while(iterator.hasNext()){
 				NRangeInfoWithLine rangeInfoWithLine = iterator.next();
 				int anxiousLevel = NConfig.level[rangeInfoWithLine.getAnxiousLevel()];
-//				int angerLevel = NConfig.level[rangeInfoWithLine.getAngerLevel()];
-				fileOperator.loadWriteFile(dataInfo.getParsedDirPath()+anxiousLevel+"\\"+dataInfo.getClassCount(anxiousLevel)+".csv");
+				int angerLevel = NConfig.angerLevel[rangeInfoWithLine.getAngerLevel()];
+//				fileOperator.loadWriteFile(dataInfo.getParsedDirPath()+anxiousLevel+"\\"+dataInfo.getClassCount(anxiousLevel)+".csv");
+				fileOperator.loadWriteFile(dataInfo.getParsedDirPath()+"anger\\"+angerLevel+"\\"+dataInfo.getClassCount(angerLevel)+".csv");
 				String line;
 				
 //				if(anxiousLevel==2&&dataInfo.getClassCount(anxiousLevel)==10){
